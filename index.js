@@ -8,7 +8,7 @@ const getTodos = (state) => state.todos;
 const selector = createSelector(
   [getVisibilityFilter, getTodos],
   (visibilityFilter, todos) => {
-    console.log('Debug: 01');
+    console.log('Debug: 01 [ computing selector ]');
     switch (visibilityFilter) {
       case 'SHOW_ALL':
         return todos;
@@ -27,22 +27,24 @@ const todos = [
   { value: 43, completed: true },
 ];
 
-let state = {
+const state1 = {
   todos,
   visibilityFilter: 'SHOW_ACTIVE',
+  somethingElse: 42,
 };
 
-console.log(selector(state));
-console.log(selector(state));
+console.log(selector(state1));
+console.log(selector(state1));
 
 
-state = {
-  todos,
-  visibilityFilter: 'SHOW_ACTIVE',
+const state2 = {
+  ...state1,
+  somethingElse: 43,
+  visibilityFilter: 'SHOW_ALL',
 };
 
-console.log(selector(state));
+console.log(selector(state2));
 
-todos.push({ value: 44, completed: true });
+state2.visibilityFilter = 'SHOW_ACTIVE'; // does not trigger refresh
 
-console.log(selector(state));
+console.log(selector(state2));
